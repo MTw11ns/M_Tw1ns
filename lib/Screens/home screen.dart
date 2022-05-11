@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names, avoid_print, file_names, prefer_const_constructors
+// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names, avoid_print, file_names, prefer_const_constructors, curly_braces_in_flow_control_structures
 
 import 'dart:developer';
 

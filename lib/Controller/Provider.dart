@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:radio/shared/network/local/favourite_model.dart';
 import 'package:radio/shared/network/local/local_db.dart';
 import '../Data/Data.dart';
+import '../Screens/search.dart';
 import 'SQFlite.dart';
 
 class DataProvider with ChangeNotifier {
@@ -20,7 +21,7 @@ class DataProvider with ChangeNotifier {
   static String image = homeRadios[0].imageUrl;
   static IconData playPauseIcon = Icons.play_arrow;
   static IconData favIcon = Icons.favorite_border;
-
+  String query= '';
 
   changeBar(FavouriteModel favouriteModel) async{
     DataProvider.title = favouriteModel.name!;
@@ -32,6 +33,34 @@ class DataProvider with ChangeNotifier {
     getAudio(favouriteModel.soundUrl!);
     notifyListeners();
   }
+
+  //////////////////////////////////////////////////////Search
+//   void searchprocess(String query) {
+//     final searchradios=homeRadios.where((radiodata)
+//     {
+//       final titlelower=radiodata.name.toLowerCase();
+//       final typelower=radiodata.type.toLowerCase();
+//       final searchlower=query.toLowerCase();
+//
+//       return titlelower.contains(searchlower)||typelower.contains(searchlower);
+//
+//     } ).toList();
+//
+//
+//       this.query=query;
+//       this.searchradios=searchradios;
+//       notifyListeners();
+//
+//   }
+//
+// ///////////////////////////////////////////////////////
+//
+//   Widget Buildserach(searchprocess)=>SearchWidget(
+//     hintText:'enter radio name' ,
+//     onChanged: searchprocess,
+//     text:query,
+//
+//   );
 
   //  getData()async{
   //   final prefs = await SharedPreferences.getInstance();

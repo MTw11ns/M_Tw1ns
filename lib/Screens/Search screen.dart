@@ -1,8 +1,12 @@
+// ignore_for_file: camel_case_types, non_constant_identifier_names, avoid_types_as_parameter_names
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:radio/Data/Data.dart';
+import 'package:radio/shared/network/local/favourite_model.dart';
 
 import '../Controller/Provider.dart';
+import 'MainScreen.dart';
 import 'search.dart';
 
 class searchsc extends StatefulWidget {
@@ -15,13 +19,14 @@ class searchsc extends StatefulWidget {
 
 class _searchscState extends State<searchsc> {
 
-  late List<RadioData>searchradios;
+   List searchradios=[];
   String query= '';
 
   @override
   void initState() {
     super.initState();
-    searchradios=homeRadios;
+    searchradios=[];
+
   }
   @override
   Widget build(BuildContext context) {
@@ -36,25 +41,33 @@ class _searchscState extends State<searchsc> {
             ),
           )
       ),
-
       body: Column(
         children: [
           Expanded(
-            child: ListView.separated(
-            itemBuilder: (context, index){
-              final radio=searchradios[index];
-              return radioStation(
-                type: radio.type,
-                  image: radio.imageUrl,
-                  name: radio.name,
-                  index: index,
-                  onTap: (){
-                    Provider.of<DataProvider>(context, listen: false).getAudio(radio.soundUrl);
-                  },
-                  height: MediaQuery.of(context).size.height);
-            },
-                separatorBuilder:(context,index)=>const SizedBox(height: 10,),
-                itemCount: searchradios.length),
+            child:
+                Consumer<DataProvider>(builder: (BuildContext context, value, Widget? child) {
+                  return ListView.separated(
+                      itemBuilder: (context, index){
+                        final radio=searchradios[index];
+                        return radioStation(
+                            type: radio.type,
+                            image: radio.imageUrl,
+                            name: radio.name,
+                            index: index,
+                            onTap: (){
+                              print("sfjkgyawrjkl");
+                              value.changeBar(searchradios[index]);
+                              Provider.of<DataProvider>(context, listen: false).getAudio(radio.soundUrl);
+                              Navigator.of(context).
+                              pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+                                return home_screen();
+                              }));
+                            },
+                            height: MediaQuery.of(context).size.height);
+                      },
+                      separatorBuilder:(context,index)=>const SizedBox(height: 10,),
+                      itemCount: searchradios.length);
+    },)
           )
         ],
       ),
@@ -62,23 +75,23 @@ class _searchscState extends State<searchsc> {
   }
 
   Widget Buildserach()=>SearchWidget(
-    hintText:'enter radio name' ,
+    hintText:'Enter radio name' ,
     onChanged: searchprocess,
     text:query,
 
   );
 
   void searchprocess(String query) {
-    final searchradios=homeRadios.where((radiodata)
+    var searchradios=Provider.of<DataProvider>(context, listen: false).homeRadiosData.where(
+            (radiodata)
     {
-      final titlelower=radiodata.name.toLowerCase();
-      final typelower=radiodata.type.toLowerCase();
+      final titlelower=radiodata.name?.toLowerCase();
+      final typelower=radiodata.type?.toLowerCase();
       final searchlower=query.toLowerCase();
 
-      return titlelower.contains(searchlower)||typelower.contains(searchlower);
+      return titlelower!.contains(searchlower)||typelower!.contains(searchlower);
 
     } ).toList();
-
     setState(() {
       this.query=query;
       this.searchradios=searchradios;

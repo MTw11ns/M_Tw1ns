@@ -19,9 +19,7 @@ class _sportsState extends State<sports> {
 
   @override
   Widget build(BuildContext context) {
-    var Size=MediaQuery.of(context);
     final size = MediaQuery.of(context).size;
-
 
     return  Scaffold(
 
@@ -71,7 +69,7 @@ class _sportsState extends State<sports> {
                         subtitle: radiodata.allSportsItems[index].type!,
                         image: radiodata.allSportsItems[index].imageUrl!,
                         ontap: (){
-                          radiodata.changeBar(radiodata.allMusicItems[index]);
+                          radiodata.changeBar(radiodata.allSportsItems[index]);
                         },
                         // ontap: () {
                         //
