@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names, file_names, camel_case_types, prefer_const_constructors, unused_element, must_be_immutable, avoid_print
-
 import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
