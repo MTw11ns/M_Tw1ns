@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +6,13 @@ import 'package:radio/shared/network/local/favourite_model.dart';
 import 'package:radio/shared/network/local/local_db.dart';
 import '../Data/Data.dart';
 import 'SQFlite.dart';
+import 'package:alan_voice/alan_voice.dart';
+
 
 class DataProvider with ChangeNotifier {
+
+  static DataProvider get(BuildContext context) => Provider.of<DataProvider>(context, listen: false);
+
   late List<RadioData> searchradios;
   static int index = 0;
   static String title = homeRadios[0].name;
@@ -31,10 +35,93 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  //  getData()async{
-  //   final prefs = await SharedPreferences.getInstance();
-  //  data.Final= prefs.getBool("1");
-  // }
+  void currentChannel (int indx){
+      DataProvider.index = indx;
+      DataProvider.title = homeRadios[DataProvider.index].name;
+      DataProvider.category = homeRadios[DataProvider.index].type;
+      DataProvider.image = homeRadios[DataProvider.index].imageUrl;
+      DataProvider.soundUrl = homeRadios[DataProvider.index].soundUrl;
+      DataProvider.playPauseIcon = Icons.pause;
+      DataProvider.id = homeRadios[DataProvider.index].id;
+
+      getAudio(DataProvider.soundUrl);
+
+      notifyListeners();
+  }
+
+  void setupAlan(){
+    AlanVoice.addButton(
+        "5a1f2b34d4b1d69620e6b6972cca03b42e956eca572e1d8b807a3e2338fdd0dc/stage",
+        buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT
+    );
+
+    void _handleCommand(Map<String, dynamic> response){
+      debugPrint("command was ${response.toString()}");
+      switch(response["command"].toString().toLowerCase()){
+        case 'play':
+          // Provider.of<DataProvider>(context, listen: false).
+          getAudio(DataProvider.soundUrl);
+          // setState(() {
+          DataProvider.playPauseIcon = Icons.pause;
+          // });
+          break;
+        case 'pause':
+          pause();
+          DataProvider.playPauseIcon = Icons.play_arrow;
+          break;
+        case 'play_channel':
+          pause();
+          DataProvider.index = response['id'] - 1;
+          currentChannel(DataProvider.index);
+          break;
+        case 'favorite':
+          toggleFavIcon(favouriteModel:   FavouriteModel(
+            id:  allItems[DataProvider.index].id,
+            name:  allItems[DataProvider.index].name,
+            type:  allItems[DataProvider.index].type,
+            imageUrl:  allItems[DataProvider.index].imageUrl,
+            soundUrl:  allItems[DataProvider.index].soundUrl,
+            isFav:  allItems[DataProvider.index].isFav! == "true" ? "false" : "true",
+          ));
+          break;
+        case 'favorite_channel':
+          DataProvider.index = response['id'] - 1;
+          toggleFavIcon(favouriteModel:   FavouriteModel(
+            id:  allItems[DataProvider.index].id,
+            name:  allItems[DataProvider.index].name,
+            type:  allItems[DataProvider.index].type,
+            imageUrl:  allItems[DataProvider.index].imageUrl,
+            soundUrl:  allItems[DataProvider.index].soundUrl,
+            isFav:  allItems[response['id'] - 1].isFav! == "true" ? "false" : "true",
+          ));
+          break;
+        case 'next':
+          DataProvider.index++;
+          if(DataProvider.index == 15)
+            DataProvider.index = 0;
+          pause();
+          currentChannel(DataProvider.index);
+          break;
+        case 'previous':
+          DataProvider.index--;
+          if(DataProvider.index == -1)
+            DataProvider.index = 14;
+          pause();
+          currentChannel(DataProvider.index);
+          break;
+        case 'category':
+          pause();
+          DataProvider.index = response['id'] - 1;
+          currentChannel(DataProvider.index);
+          break;
+      }
+
+      notifyListeners();
+    }
+
+    AlanVoice.onCommand.add((command) => _handleCommand(command.data));
+  }
+
 /////////////////////////////////////////////////////////////////////audioplayers
 
   AudioPlayer audioPlayer = AudioPlayer();
@@ -73,6 +160,7 @@ class DataProvider with ChangeNotifier {
       position = dd;
       notifyListeners();
     });
+
     notifyListeners();
   }
 
@@ -98,6 +186,8 @@ class DataProvider with ChangeNotifier {
       position = dd;
       notifyListeners();
     });
+
+
     notifyListeners();
   }
 

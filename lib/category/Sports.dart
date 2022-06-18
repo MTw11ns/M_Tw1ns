@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:radio/Data/Data.dart';
-
 import '../Controller/Provider.dart';
 import '../Screens/MainScreen.dart';
 import '../shared/network/local/favourite_model.dart';
@@ -19,12 +17,9 @@ class _sportsState extends State<sports> {
 
   @override
   Widget build(BuildContext context) {
-    var Size=MediaQuery.of(context);
     final size = MediaQuery.of(context).size;
 
-
     return  Scaffold(
-
         appBar: AppBar(
             centerTitle: true,
             leading: IconButton(onPressed: (){
@@ -71,7 +66,7 @@ class _sportsState extends State<sports> {
                         subtitle: radiodata.allSportsItems[index].type!,
                         image: radiodata.allSportsItems[index].imageUrl!,
                         ontap: (){
-                          radiodata.changeBar(radiodata.allMusicItems[index]);
+                          radiodata.changeBar(radiodata.allSportsItems[index]);
                         },
                         // ontap: () {
                         //

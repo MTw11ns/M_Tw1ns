@@ -69,7 +69,7 @@ class _NewsState extends State<News> {
                           subtitle: radiodata.allNewsItems[index].type!,
                           image: radiodata.allNewsItems[index].imageUrl!,
                           ontap: (){
-                            radiodata.changeBar(radiodata.allMusicItems[index]);
+                            radiodata.changeBar(radiodata.allNewsItems[index]);
                           },
                           // ontap: () {
                           //
