@@ -21,37 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   IconData favIcon = Icons.favorite_border;
   AudioPlayer audioPlayer = AudioPlayer();
 
-
-  // void currentChannel (int indx){
-  //   setState(() {
-  //     DataProvider.index = indx;
-  //     DataProvider.title = homeRadios[DataProvider.index].name;
-  //     DataProvider.category = homeRadios[DataProvider.index].type;
-  //     DataProvider.image = homeRadios[DataProvider.index].imageUrl;
-  //     DataProvider.soundUrl = homeRadios[DataProvider.index].soundUrl;
-  //     DataProvider.playPauseIcon = Icons.pause;
-  //     DataProvider.id = homeRadios[DataProvider.index].id;
-  //     Provider.of<DataProvider>(context, listen: false).getAudio(DataProvider.soundUrl);
-  //   });
-  // }
-
-
-
-  // @override
-  // void setState(VoidCallback fn) {
-  //   // TODO: implement setState
-  //   setupAlan();
-  //   super.setState(fn);
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   setupAlan();
-  // }
   @override
   void initState() {
-    // TODO: implement initState
     Provider.of<DataProvider>(context, listen: false).setupAlan();
     super.initState();
   }
@@ -86,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                         ontap: () {
-                          setState(() {
                             DataProvider.index=index;
                             DataProvider.title = radiodata.allItems[index].name!;
                             DataProvider.category = radiodata.allItems[index].type!;
@@ -96,8 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             DataProvider.id = radiodata.allItems[index].id!;
                             Provider.of<DataProvider>(context, listen: false)
                                 .getAudio(DataProvider.soundUrl);
-                          });
-                          log("Index = = ${DataProvider.index}");
+                          // log("Index = = ${DataProvider.index}");
                         },
                       ),
                       itemCount: radiodata.allItems.length,

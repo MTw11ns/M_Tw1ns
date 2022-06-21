@@ -49,7 +49,7 @@ class _searchscState extends State<searchsc> {
                   name: radio.name,
                   index: index,
                   onTap: (){
-                    Provider.of<DataProvider>(context, listen: false).getAudio(radio.soundUrl);
+                    Provider.of<DataProvider>(context, listen: false).currentChannel(radio.id - 1);
                   },
                   height: MediaQuery.of(context).size.height);
             },
